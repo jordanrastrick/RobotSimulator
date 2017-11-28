@@ -112,7 +112,7 @@ describe('robot.test.js', function() {
             .rotateLeft()
             .rotateLeft()
             .rotateLeft();
-        expect(sameDir.toString().to.equal(str));            
+        expect(sameDir.toString()).to.equal(str);            
       });
     });
     it('composes four rotateRights to the identity',
@@ -124,7 +124,7 @@ describe('robot.test.js', function() {
             .rotateRight()
             .rotateRight()
             .rotateRight();
-        expect(sameDir.toString().to.equal(str));            
+        expect(sameDir.toString()).to.equal(str);            
       });
     });
     it('gives a different direction from a single rotation',
@@ -132,7 +132,7 @@ describe('robot.test.js', function() {
       ['NORTH', 'EAST', 'SOUTH', 'WEST'].forEach(function(str) {
         var direction = Direction.fromString(str); 
         var sameDir = direction.rotateRight();
-        expect(sameDir.toString().not.to.equal(str));            
+        expect(sameDir.toString()).not.to.equal(str);            
       });
     });
 
