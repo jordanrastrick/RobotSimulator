@@ -32,6 +32,14 @@ Change directory for the desired location of the repository, then run:
 
 `> git clone https://github.com/jordanrastrick/RobotSimulator.git`
 
+Change to the repository directory:
+
+`> cd RobotSimulator`
+
+Finally install the required `node` packages:
+
+`> npm install` 
+
 ## Usage
 
 `> node robot`
