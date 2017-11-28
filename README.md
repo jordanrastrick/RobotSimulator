@@ -28,14 +28,13 @@ and
 
 ## Installation
 
-[@todo: git clone]
+Change directory for the desired location of the repository, then run: 
+
+`> git clone https://github.com/jordanrastrick/RobotSimulator.git`
 
 ## Usage
 
 `> node robot`
-
-[@todo: example]
-
 
 ## Testing
 
@@ -45,9 +44,11 @@ Run:
 
 to execute the unit test suite. 
 
-To execute the integration tests, pipe `e2e-tests.in` into the main application:
+To execute a given integration test, pipe the assorted `e2e-tests\*.in` into the main application e.g.:
 
-`> node robot < e2e-tests.in`
+`> node robot < e2e-tests\0.in`
+
+and diff against `e2e-tests\0.out`, etc.
 
 ## Overview
 
@@ -112,8 +113,13 @@ The simple core data structure classes - Vector, SimpleGrid, Direction - are all
 
 With respect to the Vector class, I considered representing locations and movements with their own types, i.e. restricting the addition operation on locations to only take movements as an argument. However it seemed like an unnecessary complication with the current simple specification of the project, that could perhaps be revisited if making a future extension.
 
-The grid in the problem specification does not actually need any internal data structure; it is "only" a boundary condition on the robot's movement. However the interface of the provided SimpleGrid class should be extensible to Grids of more complex shapes, internal obstacles, potentially even multiple robots, etc.
+The Grid in the problem specification does not actually need any internal data structure; it is "only" a boundary condition on the robot's movement. However the interface of the provided SimpleGrid class should be extensible to Grids of more complex shapes, internal obstacles, potentially even multiple robots, etc.
 
+The Direction class is the most complex of the data structures, primarily because I made it capable of handling general rotations by any number of right angles with a view to possible future extensions, as this was not too difficult to achieve.
+
+The main class, Robot, hands off most of it's work to the underlying data structures. Its primary job is to parse the stream of text commands, and translate them until. 
+
+In general, the components are designed to fail fast, throwing in the event of unexpected runtime conditions. Later iterations of the project may catch and handle some of these errors and different points in the stack but currently they simply all lead to program termination. 
 
 
 ## License 
