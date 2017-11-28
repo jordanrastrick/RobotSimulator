@@ -33,10 +33,6 @@ class Vector {
 }
 
 
-// The grid in the problem specification does not actually need any internal 
-// data structure; it is "only" a boundary condition on the robot's movement. 
-// However this interface should be extensible to Grids of more complex shapes, 
-// internal obstacles, potentially even multiple robots, etc.
 
 
 class SimpleGrid {
