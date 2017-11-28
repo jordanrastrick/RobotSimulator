@@ -68,6 +68,70 @@ class SimpleGrid {
 
 }
 
+// Get the number n, where 0 <= n < divisor, such that, 
+// quotient === k * divisor + n, for some integer k
+function positiveMod(quotient, divisor) {
+  var regularMod = quotient % divisor;
+  return regularMod < 0 ? regularMod + Math.abs(divisor) : regularMod;  
+}
+
+class Direction {
+  static get _count() {
+    return 4;
+  }
+
+  static get _stringValues() {
+    return ['NORTH', 'EAST', 'SOUTH', 'WEST'];
+  }
+
+  static get _unitMovements() {
+    return [
+      new Vector(0, 1), 
+      new Vector(1, 0), 
+      new Vector(0, -1),
+      new Vector(-1, 0),
+    ];
+
+  }
+
+  constructor(clockwiseRightAngles) {
+      this._clockwiseRightAngles =
+          positiveMod(clockwiseRightAngles, this.constructor._count);
+  }
+
+  
+  static fromString(str) {
+    var ix = this._stringValues.indexOf(str);
+    if (ix ===- 1) {
+      throw new Error('Invalid value for constructing a Direction');
+    } else {
+      return new Direction(ix);
+    }
+  }
+
+  toString() {
+    return this.constructor._stringValues[this._clockwiseRightAngles];
+  }
+
+  _rotateBy(clockwiseRightAngles) {
+    return new Direction(this._clockwiseRightAngles + clockwiseRightAngles); 
+  }
+  
+  rotateLeft() {
+    return this._rotateBy(-1);
+  }
+
+  rotateRight() { 
+    return this._rotateBy(1);
+  }  
+  
+  // Get the unit (length 1) movement in this direction:
+  unitMovement() {
+    return this.constructor._unitMovements[this._clockwiseRightAngles];
+  }
+
+}
 
 
-module.exports = {Vector, SimpleGrid};
+
+module.exports = {Vector, SimpleGrid, Direction};
