@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var fs = require('fs');
+var readline = require('readline');
 
 // We know from basic mathematics that we can conveniently represent both 
 // locations and differences in location (i.e. movements) through the same 
@@ -188,9 +189,28 @@ class Robot {
 // https://nodejs.org/docs/latest/api/all.html#modules_accessing_the_main_module
 
 if (require.main === module) {
-  var r2d2 = new Robot();
-  var buffer = fs.readFileSync(0);
-  r2d2.processCommands(buffer.toString());
+
+
+  process.stdin.setEncoding('utf-8');
+  var terminal = readline.createInterface({
+    input: process.stdin, 
+    output: process.stdout,
+  });
+  var isTty = process.stdin.isTTY;
+  terminal.setPrompt('> ');  
+  var maybePrompt = () => isTty ? terminal.prompt() : undefined;
+  var maybeLog = str => isTty ? console.log(str) : undefined;
+  var input = [];
+  maybePrompt();
+  terminal.on('line', line => { 
+    input.push(line); 
+    maybePrompt();
+  });
+  terminal.on('close', () => {
+    maybeLog('\n'); // separate input and output;
+    var r2d2 = new Robot();      
+    r2d2.processCommands(input.join('\n'));
+  });
 }
 
 // Export components (primarily for testing)
