@@ -184,12 +184,14 @@ class Robot {
 
 }
 
-// On application load
+// Read from stdin only if this is being executed as a script, not imported:
+// https://nodejs.org/docs/latest/api/all.html#modules_accessing_the_main_module
 
-var r2d2 = new Robot();
-var buffer = fs.readFileSync(0);
-r2d2.processCommands(buffer.toString());
-
+if (require.main === module) {
+  var r2d2 = new Robot();
+  var buffer = fs.readFileSync(0);
+  r2d2.processCommands(buffer.toString());
+}
 
 // Export components (primarily for testing)
 
