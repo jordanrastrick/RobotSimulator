@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var fs = require('fs');
 
 // We know from basic mathematics that we can conveniently represent both 
 // locations and differences in location (i.e. movements) through the same 
@@ -122,5 +123,74 @@ class Direction {
 }
 
 
+class Robot {
+  constructor() {
+    this.grid = new SimpleGrid(5, 5);
+  }
 
-module.exports = {Vector, SimpleGrid, Direction};
+
+  processCommands(input) {
+      
+    _(input.split('\n'))
+        .map(cmd => cmd.trim()) // stripe out extraneous ws for convenience
+      // Any command prior to a PLACE is invalid and should be ignored:
+        .dropWhile(cmd => !cmd.startsWith('PLACE'))
+        .map(cmd => cmd.split(' '))
+        .forEach(([cmdName, argStr]) => {
+      if (!_.includes(['PLACE', 'LEFT', 'RIGHT', 'MOVE', 'REPORT'], cmdName)) {
+        throw new Error('Invalid command given to robot: ' + cmdName);
+      }
+      var args;
+      if (cmdName === 'PLACE') {
+        args = argStr.split(',');
+        args[0] = parseInt(args[0]);
+        args[1] = parseInt(args[1]);
+      } else {
+        args = [];
+      }
+      var methodName = cmdName.toLowerCase();
+      this[methodName](...args);            
+    });
+  }
+
+  place(x, y, facing) {
+    var newLocation = new Vector(x, y);
+    if (this.grid.navigable(newLocation)) {
+      this.location = newLocation;
+      this.direction = Direction.fromString(facing);
+    } 
+    // otherwise ignore the invalid place command 
+  }
+
+  left() {
+    this.direction = this.direction.rotateLeft();
+  }
+
+  right() {
+    this.direction = this.direction.rotateRight();    
+  }
+
+  move() {
+    var newLocation = this.location.add(this.direction.unitMovement());
+    if (this.grid.navigable(newLocation)) {
+      this.location = newLocation;
+    }    
+  }
+
+  report() {
+    console.log([this.location.x, this.location.y, this.direction.toString()]
+        .join(','));  
+  }
+
+}
+
+// On application load
+
+var r2d2 = new Robot();
+var buffer = fs.readFileSync(0);
+r2d2.processCommands(buffer.toString());
+
+
+// Export components (primarily for testing)
+
+module.exports = {Vector, SimpleGrid, Direction, Robot};
