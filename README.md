@@ -79,7 +79,7 @@ A robot will `REPORT` by printing to `stdout` its current status in the same for
 
 ## Example
 
-(from exercise specification "Code Test -Robot.pdf")
+(taken from exercise specification "Code Test -Robot.pdf")
 
 `stdin`:
 ```
@@ -99,9 +99,22 @@ REPORT
 
 ## Design
 
-### 1. Launch
+### Launch
+
+On application launch the parser interprets the commands passed in through `stdin`. These are interpreted into methods of the Robot class. These methods in turn make use of the core data structures:
+  * `Vector` --> For keep tracking of robot's location, and representing movement
+  * `SimpleGrid` --> For enforcing the boundaries on the robot's movement
+  * `Direction` --> For tracking where the robot faces, and calculating rotations   
 
 ### Discussion
+
+The simple core data structure classes - Vector, SimpleGrid, Direction - are all immutable (provided their public-facing interfaces are respected). In my experience with both immutable and mutable data structures that represent small, simple pieces of information, the former are less bug prone.    
+
+With respect to the Vector class, I considered representing locations and movements with their own types, i.e. restricting the addition operation on locations to only take movements as an argument. However it seemed like an unnecessary complication with the current simple specification of the project, that could perhaps be revisited if making a future extension.
+
+The grid in the problem specification does not actually need any internal data structure; it is "only" a boundary condition on the robot's movement. However the interface of the provided SimpleGrid class should be extensible to Grids of more complex shapes, internal obstacles, potentially even multiple robots, etc.
+
+
 
 ## License 
 
