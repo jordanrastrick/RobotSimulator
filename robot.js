@@ -39,4 +39,35 @@ class Vector {
   }
 }
 
-module.exports = {Vector};
+
+// The grid in the problem specification does not actually need any internal 
+// data structure; it is "only" a boundary condition on the robot's movement. 
+// However this interface should be extensible to Grids of more complex shapes, 
+// internal obstacles, potentially even multiple robots, etc.
+
+
+class SimpleGrid {
+  constructor(width, height) {
+    if (!_.every([
+      _.isInteger(width), 
+      _.isInteger(height), 
+      width > 0, 
+      height > 0,
+    ])) { 
+      throw new Error('Can only construct SimpleGrid with positive integers ' 
+          + '(' + width + ', ' + height + ')'); 
+    }
+    this._width = width;
+    this._height = height;  
+  }
+
+  navigable(location) {
+    return 0 <= location.x && location.x < this._width
+        && 0 <= location.y && location.y < this._height;
+  } 
+
+}
+
+
+
+module.exports = {Vector, SimpleGrid};
