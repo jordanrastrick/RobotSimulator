@@ -11,7 +11,7 @@ require('sinon');
 
 // The module under test:
 
-var {Vector, SimpleGrid} = require('../robot');
+var {Vector, SimpleGrid, Direction} = require('../robot');
 
 
 describe('robot.test.js', function() {
@@ -87,4 +87,55 @@ describe('robot.test.js', function() {
       expect(grid.navigable(edgeAdj)).to.be.false;
     });
   });
+
+
+  describe('Direction',  function() {
+    it('acts as the identity when converting from a string and back',
+        function() {
+      ['NORTH', 'EAST', 'SOUTH', 'WEST'].forEach(function(str) {
+        expect(Direction.fromString(str).toString()).to.equal(str);
+      });
+    });
+    it('composes rotateLeft and rotateRight to the identity',
+        function() {
+      ['NORTH', 'EAST', 'SOUTH', 'WEST'].forEach(function(str) {
+        var direction = Direction.fromString(str); 
+        expect(direction.rotateLeft().rotateRight().toString()).to.equal(str);
+      });
+    });
+    it('composes four rotateLefts to the identity',
+        function() {
+      ['NORTH', 'EAST', 'SOUTH', 'WEST'].forEach(function(str) {
+        var direction = Direction.fromString(str); 
+        var sameDir = direction
+            .rotateLeft()
+            .rotateLeft()
+            .rotateLeft()
+            .rotateLeft();
+        expect(sameDir.toString().to.equal(str));            
+      });
+    });
+    it('composes four rotateRights to the identity',
+        function() {
+      ['NORTH', 'EAST', 'SOUTH', 'WEST'].forEach(function(str) {
+        var direction = Direction.fromString(str); 
+        var sameDir = direction
+            .rotateRight()
+            .rotateRight()
+            .rotateRight()
+            .rotateRight();
+        expect(sameDir.toString().to.equal(str));            
+      });
+    });
+    it('gives a different direction from a single rotation',
+        function() {
+      ['NORTH', 'EAST', 'SOUTH', 'WEST'].forEach(function(str) {
+        var direction = Direction.fromString(str); 
+        var sameDir = direction.rotateRight();
+        expect(sameDir.toString().not.to.equal(str));            
+      });
+    });
+
+  });
+
 });
