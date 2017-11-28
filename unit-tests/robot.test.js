@@ -11,7 +11,7 @@ require('sinon');
 
 // The module under test:
 
-var {Vector} = require('../robot');
+var {Vector, SimpleGrid} = require('../robot');
 
 
 describe('robot.test.js', function() {
@@ -56,5 +56,35 @@ describe('robot.test.js', function() {
       expect(sum1.equals(sum2)).to.be.true;
     });
 
+  });
+
+  
+  describe('SimpleGrid', function() {
+    it('throws on invalid arguments to the constructor', function() {
+      var invalidGridFactory = () => new SimpleGrid(0, 5);
+      expect(invalidGridFactory).to
+          .throw(/Can only construct SimpleGrid/);
+    });
+
+    it('reflects navigability of interior, corner and edge points', function() {
+      var grid = new SimpleGrid(3, 5);
+      var interior = new Vector(1, 3);
+      var corner = new Vector(0, 0);
+      var edge = new Vector(2, 3);
+      expect(grid.navigable(interior)).to.be.true;
+      expect(grid.navigable(corner)).to.be.true;
+      expect(grid.navigable(edge)).to.be.true;
+    });
+    
+    it('reflects non-navigability of exterior, corner-adjacenet and ' + 
+        'edge-adjacent points', function() {
+      var grid = new SimpleGrid(6, 4);
+      var exterior = new Vector(10, 10);
+      var cornerAdj = new Vector(6, -1);
+      var edgeAdj = new Vector(2, 4);
+      expect(grid.navigable(exterior)).to.be.false;
+      expect(grid.navigable(cornerAdj)).to.be.false;
+      expect(grid.navigable(edgeAdj)).to.be.false;
+    });
   });
 });
