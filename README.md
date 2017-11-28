@@ -44,6 +44,16 @@ Finally install the required `node` packages:
 
 `> node robot`
 
+and enter commands as described below in **Input Format**, terminating with Ctrl + D 
+
+N.B. this is currently batch-oriented, an interactive mode is to be developed.
+
+Or:
+
+`> node robot < foobar.in`
+
+where `foobar.in` is a file containing the commands.
+
 ## Testing
 
 Run:
